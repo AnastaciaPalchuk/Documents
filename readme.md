@@ -145,13 +145,7 @@ Initializes a new Git repository in your current directory. This creates a .git 
 ``` bash
 git init
 ```
-### Git Commit
-Records the changes in the repository with a descriptive message about what has been done. Commits create a snapshot of your project.
 
-```bash
-git commit -m "Initial commit"  # Add a message describing the commit
-git commit -a -m "Update files" # Automatically stage and commit all tracked changes
-```
 ### Git Status
 Shows the status of your working directory, such as files that have been modified, files staged for the next commit, and untracked files.
 
@@ -172,6 +166,13 @@ Uploads your local repository changes to a remote repository (such as GitHub or 
 ```bash
 git push origin main          # Push local changes to the main branch
 git push origin feature-branch # Push local changes to a specific branch
+```
+### Git Commit
+Records the changes in the repository with a descriptive message about what has been done. Commits create a snapshot of your project.
+
+```bash
+git commit -m "Initial commit"  # Add a message describing the commit
+git commit -a -m "Update files" # Automatically stage and commit all tracked changes
 ```
 
 ### Git Pull
