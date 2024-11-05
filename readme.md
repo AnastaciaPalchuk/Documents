@@ -7,6 +7,12 @@ Docs:
 - [Chain of responsibility](#chain-of-responsibility)
 - [Singleton](#Singleton)
 - [Git Commands](#git-commands)
+- [TypeScript](#typescript)
+- [Пагінація](#пагінація)
+- [SOLID](#solid)
+- [Кодування](#кодування)
+- [Шифрування](#шифрування)
+- [Хешування](#хешування)
 
 ## Function expression & function declaration
 ### Function declaration
@@ -236,3 +242,182 @@ Moves or combines a sequence of commits to a new base commit. Useful for integra
 ```bash
 git rebase main
 ```
+
+## TypeScript
+1. Download TS library
+```bash
+npm install typescript --save-dev
+```
+2. TS транспілюється в JS.
+3. `@Types/node` друга бібліотека - типізовані бібліотеки NodeJS (рідні).
+4. `Package.json`
+додати скрипт
+```json
+  "scripts": {
+    "tsc": "tsc"
+  },
+  ```
+  5. Ініціалізувати `tsconfig.json` запустивши в терміналі
+  ```bash
+npm run tsc -- --init
+```
+6. Налаштувати в `tsconfig.json` властивість `rootDir`, це шлях до всіх ts файлів
+7. Налаштувати властивість outDir, це шлях куди буде скомпільовано результуючий js код.
+8. Написати в скрипти `build` скрипт
+```json
+"build": "tsc"
+```
+
+## Ініціалізація нового проекту 
+1. Ініціалізувати проєкт 
+``` json
+npm init -y
+```
+ Скачати бібліотеки. 
+```json
+npm install (i) libName
+```
+3. Налаштувати скрипти запуску серверу `(package.json scripts розділ)`
+3. Створити структуру папок для бекенду
+4. Створюємо `index.js`. Імпортуємо потрібні біліотеки і ініціалізуємо сервер koa.
+5. Створити нову базу даних.
+6. Спроєктувати структуру таблиць БД.
+7. Створити міграції
+8. Провести міграції
+9. Створити конекшн до БД
+10. Написання бізнес логіки
+
+
+## Пагінація
+Пагінація - це процес розділення великої кількості даних на окремі сторінки для полегшення навігації та удосконалення користувацького досвіду. 
+
+```sql
+`
+    SELECT *
+    from items i 
+    inner join categories c on i.category_id = c.id
+    limit  $1
+    offset $2;
+`
+
+```
+
+## SOLID
+### S - single responsibility 
+Принцип єдиної відповідальності.
+Кожен клас має свою зону відповідальності. Вчитель не може бути учнем.
+
+### O - open closed 
+Принцип відкритості закритості. Класи повинні бути відкриті для розширення але закриті для модифікації
+
+### L - Barbara Liskov
+ Якщо в тебе є клас Батько і є клас Син, то заміна усіх класів Батька на клас Син не має повпливати на роботу системи
+
+### I - interface segregation
+Ти маєш надавати тільки той функціонал, який потребує частина програми для свого існування
+``` ts
+class Notifications {
+  type: 'EMAIL' | 'SMS'
+  message: string
+  receiver: string
+}
+
+class NotificationRepository implements ISMSRepo, IEMAILReport {
+  sendEmail(dto) {
+    // do smth
+  }
+
+  sendSms() {
+    // do smth
+  }
+}
+
+interface ISMSRepo {
+  sendSms: () => void
+}
+
+interface IEMAILReport {
+  sendEmail: (dto) => void
+}
+
+class SMSService {
+  constructor(private readonly repo: ISMSRepo) {}
+
+  sendSMS() {
+    this.repo.sendSms()
+  }
+}
+
+class MailService {
+  constructor(private readonly repo: IEMAILReport) {}
+
+  sendEMAIL() {
+    this.repo.sendEmail({})
+  }
+}
+```
+
+## D - Dependency inversion 
+інверсія залежностей
+```ts
+import * as crypto from 'node:crypto';
+
+class CryptoService1 implements ICrypto {
+  genRandomInt() {
+    const arr: number[] = []
+    for (let i = 0; i < 6; i++) {
+      arr.push(Math.floor(Math.random() * 6))
+    }
+    return arr.join('')
+  }
+}
+
+class CryptoService2 implements ICrypto {
+  genRandomInt() {
+    return String(crypto.randomInt(100000, 900000));
+  }
+}
+
+interface ICrypto {
+  genRandomInt: () => string
+}
+
+class Service {
+  constructor(private readonly crypto: ICrypto) {}
+
+  sendEmail() {
+    const code = this.crypto.genRandomInt()
+
+    // send mail ... using code
+  }
+}
+
+const crypto1 = new CryptoService1()
+const crypto2 = new CryptoService2()
+const service = new Service(crypto2)
+```
+
+## Кодування
+- представлення даних в іншому форматі. Можливі варіанти - `base64`, `base32`, `base16` під різні потреби.
+- також використовується для передачі зображень та файлів в текстовому форматі. 
+
+## Шифрування
+- основна задача шифрування - заховати дані від зовнішніх користувачів. Код можна розшифрувати лише маючи необхідний ключ.
+
+- шифрування може бути двох видів: симетричне та асиметричне
+
+### Симетричне шифрування 
+- використовується один ключ для того, щоб зашифрувати та розшифрувати дані
+
+### Асиметричне шифрування 
+- використовується два ключі, один публічний, щоб зашифрувати та другий приватний, щоб розшифрувати дані
+
+## Хешування 
+- це переведення інформації в рядок коду, задля зменшення обсягу збереженої інформації та перевірки на достовірність. 
+
+- Основна властивість - код hash не можливо розшифрувати назад. 
+
+- Також на один інпут буде незмінно один і той самий hash код. `Дуже рідко` два різні інпути можуть дати однаковий hash .
+
+
+
