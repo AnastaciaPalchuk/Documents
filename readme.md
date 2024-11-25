@@ -166,19 +166,20 @@ git add file1.txt           # Add specific file
 git add .                   # Add all changes in the current directory
 git add *.js                # Add all .js files
 ```
-### Git Push
-Uploads your local repository changes to a remote repository (such as GitHub or GitLab).
 
-```bash
-git push origin main          # Push local changes to the main branch
-git push origin feature-branch # Push local changes to a specific branch
-```
 ### Git Commit
 Records the changes in the repository with a descriptive message about what has been done. Commits create a snapshot of your project.
 
 ```bash
 git commit -m "Initial commit"  # Add a message describing the commit
 git commit -a -m "Update files" # Automatically stage and commit all tracked changes
+```
+### Git Push
+Uploads your local repository changes to a remote repository (such as GitHub or GitLab).
+
+```bash
+git push origin main          # Push local changes to the main branch
+git push origin feature-branch # Push local changes to a specific branch
 ```
 
 ### Git Pull
